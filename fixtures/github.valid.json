@@ -1,0 +1,1 @@
+{"action":"opened","number":42,"pull_request":{"id":1234567890,"number":42,"title":"Add idempotency middleware","user":{"login":"octocat"},"head":{"sha":"a1b2c3d4e5f60718293a4b5c6d7e8f9012345678"}},"repository":{"id":987654321,"full_name":"acme/billing","private":true}}

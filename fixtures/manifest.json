@@ -1,0 +1,241 @@
+{
+ "_README": "Generated fixtures for the Webhook Verification + Idempotency Kit. Each provider has a valid delivery plus tampered, wrong-secret, expired-timestamp, missing-header and malformed-header cases. `secret` is recorded here on purpose: these are throwaway test secrets, never use any value in this file in production. `now` is the fixed clock the expired cases are relative to.",
+ "now": 1758000000,
+ "old_timestamp": 1757996400,
+ "providers": {
+  "stripe": {
+   "secret": "testsec_51a1f0e8b6d94c1fa5a3c0f37ab2de19",
+   "headers": {
+    "Stripe-Signature": "t=1758000000,v1=f037a538dc93bb6fbe75663c18061832377ac81cbf80a286804db6c59b93467a"
+   },
+   "body_file": "stripe.valid.json",
+   "cases": {
+    "valid": {
+     "headers": {
+      "Stripe-Signature": "t=1758000000,v1=f037a538dc93bb6fbe75663c18061832377ac81cbf80a286804db6c59b93467a"
+     },
+     "body_file": "stripe.valid.json",
+     "expect": "accept"
+    },
+    "tampered_body": {
+     "headers": {
+      "Stripe-Signature": "t=1758000000,v1=f037a538dc93bb6fbe75663c18061832377ac81cbf80a286804db6c59b93467a"
+     },
+     "body_file": "stripe.tampered.json",
+     "expect": "reject",
+     "expect_reason": "signature_mismatch"
+    },
+    "wrong_secret": {
+     "headers": {
+      "Stripe-Signature": "t=1758000000,v1=f037a538dc93bb6fbe75663c18061832377ac81cbf80a286804db6c59b93467a"
+     },
+     "body_file": "stripe.valid.json",
+     "expect": "reject",
+     "expect_reason": "signature_mismatch",
+     "secret": "testsec_wrong_secret_0000000000000000"
+    },
+    "expired_timestamp": {
+     "headers": {
+      "Stripe-Signature": "t=1757996400,v1=b619d44eb0ed53d036ffb1f0a4d9661191fc7aee47b063d027741322aa7071f9"
+     },
+     "body_file": "stripe.valid.json",
+     "expect": "reject",
+     "expect_reason": "timestamp_expired"
+    },
+    "missing_header": {
+     "headers": {},
+     "body_file": "stripe.valid.json",
+     "expect": "reject",
+     "expect_reason": "missing_header"
+    },
+    "malformed_header": {
+     "headers": {
+      "Stripe-Signature": "t=not-a-number,v1=f037a538dc93bb6fbe75663c18061832377ac81cbf80a286804db6c59b93467a"
+     },
+     "body_file": "stripe.valid.json",
+     "expect": "reject",
+     "expect_reason": "timestamp_not_integer"
+    },
+    "malformed_header_2": {
+     "headers": {
+      "Stripe-Signature": "this is not a signature"
+     },
+     "body_file": "stripe.valid.json",
+     "expect": "reject",
+     "expect_reason": "malformed_header"
+    },
+    "malformed_header_3": {
+     "headers": {
+      "Stripe-Signature": "t=1758000000,v1="
+     },
+     "body_file": "stripe.valid.json",
+     "expect": "reject",
+     "expect_reason": "malformed_header",
+     "note": "a t= value with no usable v1"
+    },
+    "scheme_downgrade_v0": {
+     "headers": {
+      "Stripe-Signature": "t=1758000000,v0=f037a538dc93bb6fbe75663c18061832377ac81cbf80a286804db6c59b93467a"
+     },
+     "body_file": "stripe.valid.json",
+     "expect": "reject",
+     "expect_reason": "malformed_header"
+    },
+    "future_timestamp": {
+     "headers": {
+      "Stripe-Signature": "t=1758004000,v1=69f53aa1adf2604cec03072aaed82a83405871b481a38af893588a3b31f013e2"
+     },
+     "body_file": "stripe.valid.json",
+     "expect": "reject",
+     "expect_reason": "timestamp_in_future"
+    }
+   }
+  },
+  "github": {
+   "secret": "gh_webhook_secret_a1b2c3d4e5f60718293a4b5c6d7e8f90",
+   "headers": {
+    "X-Hub-Signature-256": "sha256=7000d6783d0da2c603b6e7396cec74f0b270c95accb577753829d431611d2c57",
+    "X-GitHub-Delivery": "b1a2c3d4-e5f6-7890-abcd-ef1234567890",
+    "X-GitHub-Event": "pull_request"
+   },
+   "body_file": "github.valid.json",
+   "cases": {
+    "valid": {
+     "headers": {
+      "X-Hub-Signature-256": "sha256=7000d6783d0da2c603b6e7396cec74f0b270c95accb577753829d431611d2c57",
+      "X-GitHub-Delivery": "b1a2c3d4-e5f6-7890-abcd-ef1234567890"
+     },
+     "body_file": "github.valid.json",
+     "expect": "accept",
+     "expect_reason": "ok_no_replay_check"
+    },
+    "tampered_body": {
+     "headers": {
+      "X-Hub-Signature-256": "sha256=7000d6783d0da2c603b6e7396cec74f0b270c95accb577753829d431611d2c57"
+     },
+     "body_file": "github.tampered.json",
+     "expect": "reject",
+     "expect_reason": "signature_mismatch"
+    },
+    "wrong_secret": {
+     "headers": {
+      "X-Hub-Signature-256": "sha256=7000d6783d0da2c603b6e7396cec74f0b270c95accb577753829d431611d2c57"
+     },
+     "body_file": "github.valid.json",
+     "expect": "reject",
+     "expect_reason": "signature_mismatch",
+     "secret": "gh_wrong_secret_0000000000000000000000000000"
+    },
+    "expired_timestamp": {
+     "headers": {
+      "X-Hub-Signature-256": "sha256=7000d6783d0da2c603b6e7396cec74f0b270c95accb577753829d431611d2c57"
+     },
+     "body_file": "github.valid.json",
+     "expect": "accept",
+     "expect_reason": "ok_no_replay_check",
+     "note": "GitHub sends no timestamp, so an expired case cannot exist; deduplicate on X-GitHub-Delivery instead"
+    },
+    "missing_header": {
+     "headers": {},
+     "body_file": "github.valid.json",
+     "expect": "reject",
+     "expect_reason": "missing_header"
+    },
+    "malformed_header": {
+     "headers": {
+      "X-Hub-Signature-256": "sha256=zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+     },
+     "body_file": "github.valid.json",
+     "expect": "reject",
+     "expect_reason": "malformed_header"
+    },
+    "malformed_header_2": {
+     "headers": {
+      "X-Hub-Signature-256": "garbage"
+     },
+     "body_file": "github.valid.json",
+     "expect": "reject",
+     "expect_reason": "malformed_header"
+    },
+    "legacy_sha1_header": {
+     "headers": {
+      "X-Hub-Signature": "sha1=7000d6783d0da2c603b6e7396cec74f0b270c95accb577753829d431611d2c57"
+     },
+     "body_file": "github.valid.json",
+     "expect": "reject",
+     "expect_reason": "no_matching_scheme"
+    }
+   }
+  },
+  "shopify": {
+   "secret": "testshp_7f3c9a1e5b2d48c6a0f7e3b1d9c5a284",
+   "headers": {
+    "X-Shopify-Hmac-Sha256": "sUEsJlBrzdnsCxFK9T67iYJXTjJxZwwmFVghTaYYWxw=",
+    "X-Shopify-Webhook-Id": "c2b3a4d5-f6e7-8901-bcde-f12345678901",
+    "X-Shopify-Event-Id": "e3c4b5a6-d7e8-9012-cdef-123456789012",
+    "X-Shopify-Topic": "orders/paid"
+   },
+   "body_file": "shopify.valid.json",
+   "cases": {
+    "valid": {
+     "headers": {
+      "X-Shopify-Hmac-Sha256": "sUEsJlBrzdnsCxFK9T67iYJXTjJxZwwmFVghTaYYWxw=",
+      "X-Shopify-Webhook-Id": "c2b3a4d5-f6e7-8901-bcde-f12345678901"
+     },
+     "body_file": "shopify.valid.json",
+     "expect": "accept",
+     "expect_reason": "ok_no_replay_check"
+    },
+    "tampered_body": {
+     "headers": {
+      "X-Shopify-Hmac-Sha256": "sUEsJlBrzdnsCxFK9T67iYJXTjJxZwwmFVghTaYYWxw="
+     },
+     "body_file": "shopify.tampered.json",
+     "expect": "reject",
+     "expect_reason": "signature_mismatch"
+    },
+    "wrong_secret": {
+     "headers": {
+      "X-Shopify-Hmac-Sha256": "sUEsJlBrzdnsCxFK9T67iYJXTjJxZwwmFVghTaYYWxw="
+     },
+     "body_file": "shopify.valid.json",
+     "expect": "reject",
+     "expect_reason": "signature_mismatch",
+     "secret": "testshp_wrong_secret_0000000000000000"
+    },
+    "expired_timestamp": {
+     "headers": {
+      "X-Shopify-Hmac-Sha256": "sUEsJlBrzdnsCxFK9T67iYJXTjJxZwwmFVghTaYYWxw="
+     },
+     "body_file": "shopify.valid.json",
+     "expect": "accept",
+     "expect_reason": "ok_no_replay_check",
+     "note": "no timestamp header exists"
+    },
+    "missing_header": {
+     "headers": {},
+     "body_file": "shopify.valid.json",
+     "expect": "reject",
+     "expect_reason": "missing_header"
+    },
+    "malformed_header": {
+     "headers": {
+      "X-Shopify-Hmac-Sha256": "!!!not-base64!!!"
+     },
+     "body_file": "shopify.valid.json",
+     "expect": "reject",
+     "expect_reason": "malformed_header"
+    },
+    "malformed_header_2": {
+     "headers": {
+      "X-Shopify-Hmac-Sha256": "c2hvcnQ="
+     },
+     "body_file": "shopify.valid.json",
+     "expect": "reject",
+     "expect_reason": "signature_mismatch",
+     "note": "valid base64, wrong length digest"
+    }
+   }
+  }
+ }
+}

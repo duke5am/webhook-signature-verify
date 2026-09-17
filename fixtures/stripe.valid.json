@@ -1,0 +1,1 @@
+{"id":"evt_1Q2w3e4r5t6y7u8i9o0p","object":"event","api_version":"2025-08-27.basil","created":1757999900,"type":"checkout.session.completed","data":{"object":{"id":"cs_test_a1b2c3d4","object":"checkout.session","amount_total":3400,"currency":"usd","customer_email":"buyer@example.com","payment_status":"paid"}}}
