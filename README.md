@@ -99,4 +99,4 @@ Squeezy, Linear), signed fixtures with valid/tampered/wrong-secret/expired/
 malformed cases for every one, the Node and Python test suites (258 tests total),
 and the failure-modes and idempotency guides.
 
-→ **Webhook Verification + Idempotency Kit**: <!-- GUMROAD-LINK -->
+→ More developer tooling like this: **[duke5am.gumroad.com](https://duke5am.gumroad.com)** <!-- GUMROAD-LINK -->
