@@ -122,4 +122,4 @@ If you arrived here searching for one of these, this is the tool: **stripe webho
 
 <!-- RELATED:END -->
 
-→ More developer tooling like this: **[duke5am.gumroad.com](https://duke5am.gumroad.com)** <!-- GUMROAD-LINK -->
+→ **[Webhook Verification + Idempotency Kit](https://duke5am.gumroad.com/l/33-webhook-verification)** — $34 on Gumroad <!-- GUMROAD-LINK -->
